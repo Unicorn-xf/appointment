@@ -1,0 +1,98 @@
+/* 0228新增 */
+.record-list{
+  position: relative;
+  /* padding-top: 40rpx; */
+}
+.record-list:before{
+  position: absolute;
+  top: 40rpx; bottom: 0; left: 106rpx; z-index: 9;
+  content: '';
+  display: block;
+  width: 2rpx;
+  background: #f4f5f7;
+}
+.record-list>view{
+  position: relative; z-index: 10;
+}
+.list-tit{
+   /* height: 74rpx; */
+  line-height: 74rpx;
+  font-size: 31rpx;
+  color:black;
+  padding: 0 30rpx;
+  background: #f4f5f7;
+  font-weight: 700;
+}
+.list-cont{
+  padding: 30rpx 0;
+}
+.list-cont >view+view{
+  /* margin-top: 30rpx; */
+}
+.list-item{
+  display: flex; display: -webkit-box;
+}
+.list-item .time{
+  display: block;
+  height: 60rpx; line-height: 60rpx;
+  font-size: 24rpx;
+  color: #000038;
+}
+.list-icon{
+  display: block;
+  height: 60rpx;
+  padding: 12rpx 30rpx 18rpx;
+  box-sizing: border-box;
+  background: #fff;
+}
+.list-icon image{
+  display: block;
+  width: 30rpx;
+  height: 30rpx;
+}
+.flex-cont{
+  box-flex: 1; -webkit-box-flex: 1;
+  font-size: 0;
+}
+.flex-cont>text{
+  display: inline-block;
+  vertical-align: top;
+  height: 60rpx;
+  line-height: 60rpx;
+}
+.flex-cont>text:first-child{
+  font-size: 28rpx;
+  color: #000;
+}
+.flex-cont .list-cont{
+  padding: 12rpx 20rpx 18rpx 30rpx;
+}
+.flex-cont .ts{
+  font-size: 24rpx;
+  color: #3a93f9;
+}
+.msg-cont{
+  font-size: 24rpx;
+  color: #999;
+  text-align: justify;
+  line-height: 36rpx;
+}
+.msg-cont text,.msg-cont image{
+  display: block;
+}
+.date-tit:before{
+  position: absolute;
+  top: 0; right: 0; left: 106rpx;
+  content: '';
+  display: block;
+  height: 4rpx;
+  background: #efefef;
+}
+.myValue{
+  margin-right:5px;
+}
+.p-tab{
+  text-indent:-120rpx;
+  margin-left: 120rpx;
+  line-height: 40rpx;
+}

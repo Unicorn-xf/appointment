@@ -1,0 +1,179 @@
+/* 显示信息面板 */
+.customerPos {
+	position: absolute;
+	top: 220rpx;
+	left: 0;
+	right: 0;
+	width: 100%;
+	display: flex;
+	display: -webkit-box;
+	-moz-box-orient: horizontal;
+	box-orient: horizontal;
+}
+
+.customerPos .pos_col {
+	-moz-box-flex: 1;
+	-webkit-box-flex: 1;
+	box-flex: 1;
+	text-align: center;
+}
+
+.customerPos .pos_col .num {
+	display: block;
+	color: #999999;
+	font-size: 26rpx;
+	padding-top: 10rpx;
+}
+
+.customerPos .pos_col .number {
+	font-weight: 600;
+}
+
+.infobox {
+	position: relative;
+	display: flex;
+	/* display: -webkit-box; */
+	box-align: center;
+	-webkit-box-align: center;
+	height: 330rpx;
+	font-size: 32rpx;
+	color: #222529;
+	padding: 0 30rpx;
+	background-color: #fff;
+	margin-bottom: 20rpx;
+}
+
+.avatar {
+	width: 120rpx;
+	height: 120rpx;
+	border: 5rpx solid #999;
+	border-radius: 50%;
+	margin-top: 30rpx;
+	position: absolute;
+	overflow: hidden;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.avatar image {
+	position: absolute;
+	display: block;
+	width: 115rpx;
+	height: 115rpx;
+	border-radius: 50%;
+	margin-top: 0rpx;
+	margin-left: 0rpx;
+}
+
+.name {
+	position: absolute;
+	display: inline-block;
+	width: 300rpx;
+	height: 50rpx;
+	line-height: 50rpx;
+	margin-top: 50rpx;
+	margin-left: 180rpx;
+	font-size: 35rpx;
+	font-weight: bold;
+}
+
+.name .state {
+	font-size: 24rpx;
+	display: inline-block;
+	border: #dfdfdf 1px solid;
+	border-radius: 5rpx;
+	color: #999;
+	padding: 6rpx 12rpx;
+	font-weight: normal;
+	line-height: 1;
+	margin-left: 15rpx;
+	vertical-align: middle;
+	margin-top: -8rpx;
+}
+
+.name .userTel {
+	font-size: 28rpx;
+	color: #666666;
+	font-weight: normal;
+	display: block;
+}
+
+.name .greenCol {
+	color: #34c18d;
+	border: #34c18d 1px solid;
+}
+
+.client {
+	position: absolute;
+	width: 350rpx;
+	margin-top: 200rpx;
+	font-size: 32rpx;
+	color: #999;
+}
+
+.client .number {
+	margin-left: 133rpx;
+	display: inline-block;
+}
+
+.client .numb {
+	margin-left: 147rpx;
+	display: inline-block;
+}
+
+.todayNum {
+	position: absolute;
+	width: 340rpx;
+	margin-top: 200rpx;
+	font-size: 32rpx;
+	color: #999;
+	margin-left: 380rpx;
+}
+
+.todayNum .number {
+	margin-left: 2rpx;
+	display: inline-block;
+}
+
+.todayNum .numb {
+	margin-left: 18rpx;
+	display: inline-block;
+}
+
+.weekNum {
+	position: absolute;
+	width: 340rpx;
+	margin-top: 240rpx;
+	font-size: 32rpx;
+	color: #999;
+}
+
+.weekNum .number {
+	margin-left: 5rpx;
+	display: inline-block;
+}
+
+.weekNum .numb {
+	margin-left: 20rpx;
+	display: inline-block;
+}
+
+.monthNum {
+	position: absolute;
+	width: 340rpx;
+	margin-top: 240rpx;
+	font-size: 32rpx;
+	color: #999;
+	margin-left: 380rpx;
+}
+
+.monthNum .number {
+	margin-left: 10rpx;
+	display: inline-block;
+}
+
+.monthNum .numb {
+	margin-left: 18rpx;
+	display: inline-block;
+}
