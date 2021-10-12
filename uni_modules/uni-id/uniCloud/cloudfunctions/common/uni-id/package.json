@@ -9,8 +9,5 @@
     "url": "git+https://gitee.com/dcloud/uni-id.git"
   },
   "author": "",
-  "license": "Apache-2.0",
-  "dependencies": {
-    "uni-config-center": "file:../../../../../uni-config-center/uniCloud/cloudfunctions/common/uni-config-center"
-  }
+  "license": "Apache-2.0"
 }

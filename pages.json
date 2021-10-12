@@ -5,11 +5,17 @@
 			"style": {
 				"navigationBarTitleText": "首页"
 			}
+		},
+		{
+			"path": "pages/feature/appointment",
+			"style": {
+				"navigationBarTitleText": "预约页"
+			}
 		}
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "uni-app",
+		"navigationBarTitleText": "财富预约",
 		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#F8F8F8"
 	}
