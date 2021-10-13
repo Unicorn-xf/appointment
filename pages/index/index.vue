@@ -38,7 +38,7 @@
 			goUpNotice,
 			banner
 		},
-		data() {
+		data() { 
 			return {
 				indicatorDots: true,
 				autoplay: true,
