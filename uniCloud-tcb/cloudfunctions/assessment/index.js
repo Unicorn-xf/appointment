@@ -5,65 +5,19 @@ exports.main = async (event, context) => {
 	//访问云函数
 	switch (event.method) {
 		//根据父id查询部门
-		case 'getByParentId':
-			return getByParentId(event)
-			break;
-		case 'addDepartment':
-			return addDepartment(event)
-			break;
-		case 'editDepartment':
-			return editDepartment(event)
-			break;
-		case 'deleteDepartment':
-			return deleteDepartment(event)
-			break;
-		case 'searchDepartment':
-			return searchDepartment(event)
-			break;
-		case 'getDeptList':
-			return getDeptList(event)
+		case 'addFormInfo':
+			return addFormInfo(event.data)
 			break;
 		default:
 			break;
 	}
 };
 
-/**
- * 查询部门
- */
-async function getByParentId(data) {
-	const $ = db.command.aggregate;
-	const _ = db.command
+
+async function addFormInfo(data) {
 	try {
-		let deptInfo = await db.collection('dept').where({
-			dept_pid: data.info.parentId,
-			is_enable: "0",
-			is_delete: "0"
-		}).get();
-		deptInfo = deptInfo.data
-		for(let i=0;i<deptInfo.length;i++){
-			let count = await db.collection('dept').where({
-				dept_pid: deptInfo[i]._id,
-			}).count();
-			count = count.total;
-			if(count > 0){
-				deptInfo[i].is_parent = "1"
-			}else{
-				deptInfo[i].is_parent = "0"
-			}
-			
-			let list = await db.collection('dept').where({
-				_id: deptInfo[i].dept_pid,
-			}).get();
-			list = list.data;
-			if(list.length > 0){
-				deptInfo[i].parent_name = list[0].dept_name
-			}else{
-				deptInfo[i].parent_name = ""
-			}
-		}
-		
-		return tools.serverSuccess(tools.underLineTurnHump(deptInfo));
+		await db.collection('reservationAmount').add(data)
+		return tools.serverSuccess("添加成功");
 	} catch (err) {
 		return err.message
 	}
