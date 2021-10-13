@@ -1,5 +1,8 @@
 <template>
 	<view>
+		<view class="top">
+			财富预约
+		</view>
 		<view class="notificationBanner">
 			<banner :list="bannerList" :themeColor="themeColor" @toDetailPage="toDetailPage"></banner>
 		</view>
@@ -7,7 +10,7 @@
 			<goUpNotice :list="goUpNoticeList" :themeColor="themeColor" :haveMore="false"></goUpNotice>
 		</view>
 
-		<view class="content" style="margin-top: 20rpx;margin-bottom: 20rpx;">
+		<view class="content" style="margin-top: 50rpx;margin-bottom: 50rpx;">
 			<view style="text-align: center;font-weight: 600;font-size: 40rpx;">今日预约额度仅剩</view>
 			<view style="text-align: center;font-weight: 600;font-size: 40rpx;">145万元</view>
 		</view>
@@ -32,76 +35,89 @@
 	import gbroMarquee from '@/components/gbro-marquee/marquee.vue';
 	import goUpNotice from '@/components/notice-goUp/notice-goUp.vue';
 	import banner from '@/components/ay-banner/banner.vue';
+	let assessment = require('../../services/assessment.js')
 	export default {
 		components: {
 			gbroMarquee,
 			goUpNotice,
 			banner
 		},
-		data() { 
+		data() {
 			return {
 				indicatorDots: true,
 				autoplay: true,
 				interval: 1000,
 				duration: 1000,
 				themeColor: '#f2f2f2',
-				goUpNoticeList: [{
-						directOne1: '路遥知马力，日久见人心',
-						directOne2: '《元曲选·争报恩》',
-					}, {
-						directOne1: '天生我材必有用',
-						directOne2: '李白',
-					},
-					{
-						directOne1: '穷则独善其身，达则兼济天下',
-						directOne2: '孟子',
-					}, {
-						directOne1: '业精于勤，荒于嬉；行成于思，毁于随',
-						directOne2: '韩愈',
-					}, {
-						directOne1: '一年之计在于春，一日之计在于晨',
-						directOne2: '萧绎',
-					},
-				],
+				goUpNoticeList: [],
 				bannerList: [{
-						id: 0,
-						img: '../../static/images/banner.jpg',
-						url: 'www.baidu.com/',
+					id: 0,
+					img: '../../static/images/banner.jpg',
+					url: 'www.baidu.com/',
 
-					},
-					{
-						id: 1,
-						img: 'https://cdn.pixabay.com/photo/2016/11/23/17/55/beach-1854072__340.jpg',
-						url: 'www.baidu.com/',
-					},
-					{
-						id: 2,
-						img: 'https://cdn.pixabay.com/photo/2016/11/19/12/25/art-1839006__340.jpg',
-						url: 'www.baidu.com/',
-					},
-				],
+				}],
 			}
 		},
 		onLoad() {
-
+			this.selectgoUpNoticeList();
 		},
 		methods: {
+			selectgoUpNoticeList() {
+				let self = this
+				assessment.selectGoUpNoticeList({
+					data: {}
+				}).then(res => {
+					if (res.result.retcode == "0000") {
+						var data = res.result.data;
+						var info = [];
+						data.forEach((item, index) => {
+							var newStr;
+							if (item.name.length === 2) {
+								newStr = item.name.substr(0, 1) + '*';
+							} else if (item.name.length > 2) {
+								var char = '';
+								for (var i = 0, len = item.name.length - 1; i < len; i++) {
+									char += '*';
+								}
+								newStr = item.name.substr(0, 1) + char;
+							} else {
+								newStr = item.name;
+							}
+							//var money = this.moneyFormat(parseInt(item.money))
+							info.push({
+								"directOne1": newStr,
+								"directOne2": "成功预约" + item.money + "元"
+							});
+						})
+						self.goUpNoticeList = info;
+					}
+				}).catch(err => {
+					console.info("错误：" + err.message)
+				})
+			},
+
+			moneyFormat: function(arg) {
+				// if (arg.toString().length >= 13) {
+				// 	// return arg/1000000000000+"万亿"
+				// 	const moneys = arg / 1000000000000
+				// 	const realVal = parseFloat(moneys).toFixed(2);
+				// 	return realVal + "万亿"
+
+				// } else if (arg.toString().length >= 9) {
+				// 	const moneys = arg / 100000000
+				// 	const realVal = parseFloat(moneys).toFixed(2);
+				// 	return realVal + "亿"
+				// } else if (arg.toString().length >= 4) {
+					const moneys = arg / 10000
+					const realVal = parseFloat(moneys).toFixed(1);
+					return realVal + "万"
+				//}
+
+			},
 			toAppointmentPage() {
 				uni.navigateTo({
 					url: '../feature/appointment'
 				})
-			},
-			changeIndicatorDots(e) {
-				this.indicatorDots = !this.indicatorDots
-			},
-			changeAutoplay(e) {
-				this.autoplay = !this.autoplay
-			},
-			intervalChange(e) {
-				this.interval = e.detail.value
-			},
-			durationChange(e) {
-				this.duration = e.detail.value
 			},
 			toDetailPage(e) {
 				let list = e.list;
@@ -132,7 +148,7 @@
 	/* 轮播 */
 	.notificationBanner {
 		padding: 0 30rpx;
-		margin-top: 30rpx;
+		margin-top: 10rpx;
 	}
 
 	/* 通知 */
@@ -152,16 +168,22 @@
 		border-radius: 5px;
 	}
 
-	.kehu,.edu {
+	.kehu,
+	.edu {
 		display: inline-block;
 		margin-left: 20rpx;
 		width: 220rpx;
 		position: relative;
 	}
-	
-	.numbers{
+
+	.numbers {
 		position: absolute;
 		right: 0;
 	}
 
+	.top {
+		text-align: center;
+		font-size: 60rpx;
+		font-weight: 600;
+	}
 </style>

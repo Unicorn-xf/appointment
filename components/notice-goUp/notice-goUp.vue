@@ -87,6 +87,7 @@
 		height: 290rpx;
 	}
 	.itemBox{
+		position: relative;
 		font-size: 28upx;
 		height: 100%;
 		display: flex;
@@ -104,7 +105,9 @@
 		
 		.directOne2{
 			padding-left: 10upx;
-			color: #D3D3D3;
+			// color: #D3D3D3;
+			position: absolute;
+			right: 0;
 		}
 		
 	}

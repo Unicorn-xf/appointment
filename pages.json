@@ -11,6 +11,12 @@
 			"style": {
 				"navigationBarTitleText": "预约页"
 			}
+		},
+		{
+			"path": "pages/feature/evaluate",
+			"style": {
+				"navigationBarTitleText": "评价页"
+			}
 		}
 	],
 	"globalStyle": {
