@@ -7,18 +7,25 @@
 			<goUpNotice :list="goUpNoticeList" :themeColor="themeColor" :haveMore="false"></goUpNotice>
 		</view>
 
-		<view class="content">
+		<view class="content" style="margin-top: 20rpx;margin-bottom: 20rpx;">
 			<view style="text-align: center;font-weight: 600;font-size: 40rpx;">今日预约额度仅剩</view>
 			<view style="text-align: center;font-weight: 600;font-size: 40rpx;">145万元</view>
 		</view>
 
-
-
-
-
-
+		<view style="width: 100%;margin-bottom: 40rpx;">
+			<view style="width: 100%;margin-bottom: 30rpx;">
+				<text class="yuyue">今日预约</text>
+				<view class="kehu">客户 <span class="numbers">25人</span></view>
+				<view class="edu">额度 <span class="numbers">355万元</span></view>
+			</view>
+			<view style="width: 100%;">
+				<text class="yuyue">累计预约</text>
+				<view class="kehu">客户 <span class="numbers">25人</span></view>
+				<view class="edu">额度 <span class="numbers">355万元</span></view>
+			</view>
+		</view>
 		<button type="primary" @click="toAppointmentPage()"
-			style="width: 120px;background-color: #ED1C24;">开始预约</button>
+			style="width: 120px;background-color: #ED1C24;position: fixed;bottom: 80rpx;left: 35%;">我要预约</button>
 	</view>
 </template>
 <script>
@@ -123,18 +130,38 @@
 		background-color: #f2f2f2;
 	} */
 	/* 轮播 */
-	.notificationBanner{
+	.notificationBanner {
 		padding: 0 30rpx;
 		margin-top: 30rpx;
 	}
+
 	/* 通知 */
 	.notificationBar {
 		padding: 0 30rpx;
 		margin-top: 30rpx;
-		height: 500rpx;
 		color: #e54059;
 	}
-	
 
+	.yuyue {
+		display: inline-block;
+		width: 200rpx;
+		text-align: center;
+		background-color: red;
+		color: yellow;
+		margin-left: 30rpx;
+		border-radius: 5px;
+	}
+
+	.kehu,.edu {
+		display: inline-block;
+		margin-left: 20rpx;
+		width: 220rpx;
+		position: relative;
+	}
 	
+	.numbers{
+		position: absolute;
+		right: 0;
+	}
+
 </style>
