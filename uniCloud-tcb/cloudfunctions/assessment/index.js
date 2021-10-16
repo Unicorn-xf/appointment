@@ -11,6 +11,12 @@ exports.main = async (event, context) => {
 		case 'selectGoUpNoticeList':
 			return selectGoUpNoticeList(event)
 			break;
+		case 'selectAmountNowDay':
+			return selectAmountNowDay(event)
+			break;
+		case 'addAssessment':
+			return addAssessment(event.data)
+			break;
 		default:
 			break;
 	}
@@ -18,9 +24,60 @@ exports.main = async (event, context) => {
 
 
 async function addFormInfo(data) {
+	const dbCmd = db.command;
 	try {
-		data.createTime = tools.formatDateTime(new Date())
+		// var beginDate = tools.formatDateLine(new Date()) +" 00:00:00";
+		// var endDate = tools.formatDateLine(new Date()) +" 23:59:59"
+		//查询当日身份证和姓名有无预约
+		let amountCode =await db.collection('reservationAmount').where({
+			name:data.name,
+			idcard:data.idcard
+		}).count();
+		
+		if(amountCode.total >= 1){
+			return tools.serverFailure("-2");
+		}
+		//查询当时金额
+		let num =await db.collection('bookingInformation').where({
+			creat_time: tools.formatDate(new Date())
+		}).get();
+		
+		num = num.data;
+		var money = num[0].money
+		var moneyForm = parseInt(data.money)
+		var shengyumoney = parseInt((money-moneyForm))  
+		
+		if(money < moneyForm){
+			return tools.serverFailure("-1");
+		}
+		//查询总条数
+		let amount =await db.collection('reservationAmount').count();
+		
+		data._id = (parseInt(amount.total)+1).toString()
+		data.money = parseInt(data.money)
+		data.create_time = tools.formatDateTime(new Date())
 		await db.collection('reservationAmount').add(data)
+		
+		await db.collection('bookingInformation').where({
+			creat_time: tools.formatDate(new Date())
+		}).update({
+			money: shengyumoney
+		});
+
+		return tools.serverSuccess((parseInt(amount.total)+1));
+	} catch (err) {
+		return err.message
+	}
+}
+/**
+ * @param {Object} data
+ * 添加评价
+ */
+async function addAssessment(data) {
+	try {
+		data.evaluate = data.evaluate == 1?'满意':(data.evaluate == 2?'一般':'不满意')
+		data.create_time = tools.formatDateTime(new Date())
+		await db.collection('assessment').add(data)
 
 		return tools.serverSuccess("添加成功");
 	} catch (err) {
@@ -32,7 +89,31 @@ async function addFormInfo(data) {
  */
 async function selectGoUpNoticeList() {
 	try {
-		let list = await db.collection('reservationAmount').get()
+		// var date = new Date()
+		// var afterDate = new Date().getTime()+60*60*1000
+		// var beginDate = tools.formatDateTime(date);
+		// var endDate = tools.formatDateTime(new Date(afterDate))
+		
+		let list = await db.collection('reservationAmount').orderBy('create_time', 'desc').get()
+		
+		return tools.serverSuccess(list.data)
+	} catch (err) {
+		return err.message
+	}
+}
+
+/**
+ * 查询当天的预约信息
+ */
+async function selectAmountNowDay() {
+	const dbCmd = db.command;
+	try {
+		var beginDate = tools.formatDateLine(new Date()) +" 00:00:00";
+		var endDate = tools.formatDateLine(new Date()) +" 23:59:59"
+		
+		let list = await db.collection('reservationAmount').where({
+			create_time:dbCmd.gte(beginDate).and(dbCmd.lte(endDate))
+		}).get();
 		return tools.serverSuccess(list.data)
 	} catch (err) {
 		return err.message

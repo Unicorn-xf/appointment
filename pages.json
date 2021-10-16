@@ -3,13 +3,14 @@
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "首页"
+				"navigationBarTitleText": "首页",
+				"enablePullDownRefresh": true
 			}
 		},
 		{
 			"path": "pages/feature/appointment",
 			"style": {
-				"navigationBarTitleText": "预约页"
+				"navigationBarTitleText": "填写预约信息"
 			}
 		},
 		{
@@ -17,12 +18,18 @@
 			"style": {
 				"navigationBarTitleText": "评价页"
 			}
+		},
+		{
+			"path": "pages/index/home",
+			"style": {
+				"navigationBarTitleText": "首页2"
+			}
 		}
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "财富预约",
-		"navigationBarBackgroundColor": "#F8F8F8",
-		"backgroundColor": "#F8F8F8"
+		"navigationBarBackgroundColor": "#f2f2f2",
+		"backgroundColor": "#f2f2f2"
 	}
 }

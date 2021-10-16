@@ -12,6 +12,17 @@ module.exports = {
 	selectGoUpNoticeList(data){
 		data.method = 'selectGoUpNoticeList'
 		return callit(data)
+	},
+	
+	//查询预约信息
+	selectAmountNowDay(data){
+		data.method = 'selectAmountNowDay'
+		return callit(data)
+	},
+	//添加评价
+	addAssessment(data){
+		data.method = 'addAssessment'
+		return callit(data)
 	}
 	
 }

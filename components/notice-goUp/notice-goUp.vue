@@ -146,12 +146,13 @@
 		// border: 1upx solid #999;
 		margin: 20upx auto;
 		position: relative;
-		height: 260rpx;
+		height: 290rpx;
 		overflow: hidden;
 		background-color: #f2f2f2;
 	}
 
 	.list .rowup {
+		
 		-webkit-animation: 10s rowup linear infinite normal;
 		animation: 2s rowup linear infinite normal;
 		position: relative;
