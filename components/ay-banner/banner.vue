@@ -4,7 +4,8 @@
 		<swiper-item>
 			<video style="width: 100%;height: 100%;" id="myVideo"
 				src="https://6661-faasspace-636c54-1302268565.tcb.qcloud.la/510a7186526849ed04a427372c138455.mp4"
-				autoplay="true" loop="true" objectFit="fill" :muted="false" :show-play-btn="false" :show-fullscreen-btn="false" :controls="false"></video>
+				autoplay="true" loop="true" objectFit="fill" :muted="false" :show-play-btn="false"
+				:show-fullscreen-btn="false" :controls="false"></video>
 		</swiper-item>
 		<swiper-item v-for="(item, index) in list" :key="index" class="box-item"
 			@click="toDetailPage({index: index,id:item.id})">
@@ -126,8 +127,13 @@
 	}
 
 	.box {
-		width: 100%;
-		height: 340upx;
+		width: 90%;
+		height: 300rpx;
+		margin-left: 40rpx;
+		margin-top: 20rpx;
+		// position: absolute;
+		// top: 395rpx;
+		// left: 106rpx;
 
 		.box-item {
 			width: 100%;

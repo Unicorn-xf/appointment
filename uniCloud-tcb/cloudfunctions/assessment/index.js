@@ -17,6 +17,9 @@ exports.main = async (event, context) => {
 		case 'addAssessment':
 			return addAssessment(event.data)
 			break;
+		case 'selectAllNoticeList':
+			return selectAllNoticeList(event.data)
+			break;
 		default:
 			break;
 	}
@@ -28,44 +31,60 @@ async function addFormInfo(data) {
 	try {
 		// var beginDate = tools.formatDateLine(new Date()) +" 00:00:00";
 		// var endDate = tools.formatDateLine(new Date()) +" 23:59:59"
-		//查询当日身份证和姓名有无预约
-		let amountCode =await db.collection('reservationAmount').where({
-			name:data.name,
-			idcard:data.idcard
+		let equipmentCode = await db.collection('equipmentInfo').where({
+			equipment: data.equipment
 		}).count();
-		
-		if(amountCode.total >= 1){
+		if (equipmentCode.total >= 1) {
+			return tools.serverFailure("-3");
+		}
+
+		//查询当日身份证和姓名有无预约
+		let amountCode = await db.collection('reservationAmount').where({
+			name: data.name,
+			idcard: data.idcard
+		}).count();
+
+		if (amountCode.total >= 1) {
 			return tools.serverFailure("-2");
 		}
 		//查询当时金额
-		let num =await db.collection('bookingInformation').where({
-			creat_time: tools.formatDate(new Date())
+		let num = await db.collection('bookingInformation').where({
+			creat_time: '20211018'
 		}).get();
-		
+
 		num = num.data;
 		var money = num[0].money
-		var moneyForm = parseInt(data.money)
-		var shengyumoney = parseInt((money-moneyForm))  
-		
-		if(money < moneyForm){
+		var moneyForm = data.money
+		var shengyumoney = (money - moneyForm)
+
+		if (money < moneyForm) {
 			return tools.serverFailure("-1");
 		}
 		//查询总条数
-		let amount =await db.collection('reservationAmount').count();
+		let amount = await db.collection('reservationAmount').count();
 		
-		data._id = (parseInt(amount.total)+1).toString()
+		data._id = (parseInt(amount.total) + 1).toString()
 		data.money = parseInt(data.money)
 		data.create_time = tools.formatDateTime(new Date())
 		await db.collection('reservationAmount').add(data)
-		
+
 		await db.collection('bookingInformation').where({
-			creat_time: tools.formatDate(new Date())
+			creat_time: '20211018'
 		}).update({
 			money: shengyumoney
 		});
 
-		return tools.serverSuccess((parseInt(amount.total)+1));
+
+		let list = {}
+		list.equipment = data.equipment
+		list.name = data.name
+		list.create_time = tools.formatDateTime(new Date())
+		await db.collection('equipmentInfo').add(list)
+
+
+		return tools.serverSuccess((parseInt(amount.total) + 1));
 	} catch (err) {
+		console.info("错误："+err.message)
 		return err.message
 	}
 }
@@ -75,7 +94,7 @@ async function addFormInfo(data) {
  */
 async function addAssessment(data) {
 	try {
-		data.evaluate = data.evaluate == 1?'满意':(data.evaluate == 2?'一般':'不满意')
+		data.evaluate = data.evaluate == 1 ? '满意' : (data.evaluate == 2 ? '一般' : '不满意')
 		data.create_time = tools.formatDateTime(new Date())
 		await db.collection('assessment').add(data)
 
@@ -88,13 +107,27 @@ async function addAssessment(data) {
  * 查询预约信息
  */
 async function selectGoUpNoticeList() {
+	const dbCmd = db.command;
 	try {
-		// var date = new Date()
-		// var afterDate = new Date().getTime()+60*60*1000
-		// var beginDate = tools.formatDateTime(date);
-		// var endDate = tools.formatDateTime(new Date(afterDate))
+		// let count = await db.collection('reservationAmount').count();
+
+		// let yei = Math.ceil(count.total / 1000);
+		// let companyInfos = [];
+
+		// for (var i = 0; i < yei; i++) {
+		// 	let cis = await db.collection('reservationAmount')
+		// 		.skip(1000 * i)
+		// 		.limit(1000)
+		// 		.get();
+		// 	companyInfos.push.apply(companyInfos, cis.data);
+		// }
+
+		let list = await db.collection('reservationAmount').where({
+			money: dbCmd.gte(300000)
+		}).limit(50)
+		.orderBy('create_time', 'desc')
+		.get()
 		
-		let list = await db.collection('reservationAmount').orderBy('create_time', 'desc').get()
 		
 		return tools.serverSuccess(list.data)
 	} catch (err) {
@@ -108,12 +141,12 @@ async function selectGoUpNoticeList() {
 async function selectAmountNowDay() {
 	const dbCmd = db.command;
 	try {
-		var beginDate = tools.formatDateLine(new Date()) +" 00:00:00";
-		var endDate = tools.formatDateLine(new Date()) +" 23:59:59"
-		
+		var beginDate = tools.formatDateLine(new Date()) + " 00:00:00";
+		var endDate = tools.formatDateLine(new Date()) + " 23:59:59"
+
 		let list = await db.collection('reservationAmount').where({
-			create_time:dbCmd.gte(beginDate).and(dbCmd.lte(endDate))
-		}).get();
+			create_time: dbCmd.gte(beginDate).and(dbCmd.lte(endDate))
+		}).limit(1000).get();
 		return tools.serverSuccess(list.data)
 	} catch (err) {
 		return err.message
@@ -122,122 +155,39 @@ async function selectAmountNowDay() {
 
 
 /**
- * 添加部门
+ * 查询累计预约信息
  */
-async function addDepartment(data) {
-	const $ = db.command.aggregate;
-	const _ = db.command
+async function selectAllNoticeList() {
+	const dbCmd = db.command;
 	try {
-		let info = data.info;
-		let list = tools.humpTurnUnderLine(info)
-		list.is_delete = "0"
-		list.gmt_create = tools.formatDateTime(new Date())
-		await db.collection('dept').add(list)
-		return tools.serverSuccess("添加成功");
-	} catch (err) {
-		return err.message
-	}
-}
+		 // await db.collection('equipmentInfo').where({
+			//  create_time: dbCmd.gte("2021-10-22 00:00:00").and(dbCmd.lte("2021-10-23 23:59:59"))
+		 // }).remove();
+		let count = await db.collection('reservationAmount').count();
 
-/**
- * 编辑部门
- */
-async function editDepartment(data) {
-	const $ = db.command.aggregate;
-	const _ = db.command
-	try {
-		let info = data.info;
-		let id = info.id
-		delete(info["id"]);
-		let list = tools.humpTurnUnderLine(info)
-		list.gmt_modified = tools.formatDateTime(new Date())
-		await db.collection('dept').where({
-			_id: id
-		}).update(list)
-		return tools.serverSuccess("编辑成功");
-	} catch (err) {
-		return err.message
-	}
-}
+		let yei = Math.ceil(count.total / 1000);
+		let companyInfos = [];
 
-/**
- * 删除部门
- */
-async function deleteDepartment(data) {
-	const $ = db.command.aggregate;
-	const _ = db.command
-	try {
-		let info = data.info.ids;
-		let list = info.split(",")
-
-		for (let i = 0; i < list.length; i++) {
-			await db.collection('dept').where({
-				_id: list[i]
-			}).remove();
+		for (var i = 0; i < yei; i++) {
+			let cis = await db.collection('reservationAmount').field({ 'money': true })
+				.skip(1000 * i)
+				.limit(1000)
+				.get();
+			companyInfos.push.apply(companyInfos, cis.data);
 		}
-		return tools.serverSuccess("删除成功");
-	} catch (err) {
-		return err.message
-	}
-}
-
-/**
- * 搜索部门
- */
-async function searchDepartment(data) {
-	const $ = db.command.aggregate;
-	const _ = db.command
-	try {
-		let info = data.info.title;
-		let deptInfo = await db.collection('dept').where({
-			dept_name: new RegExp("^.*" + info + ".*$"),
-			is_enable: "0",
-			is_delete: "0"
-		}).get();
-		deptInfo = deptInfo.data
-		for (let i = 0; i < deptInfo.length; i++) {
-			let count = await db.collection('dept').where({
-				dept_pid: deptInfo[i]._id,
-			}).count();
-			count = count.total;
-			if (count > 0) {
-				deptInfo[i].is_parent = "1"
-			} else {
-				deptInfo[i].is_parent = "0"
-			}
-
-			let list = await db.collection('dept').where({
-				_id: deptInfo[i].dept_pid,
-			}).get();
-			list = list.data;
-			if (list.length > 0) {
-				deptInfo[i].parent_name = list[0].dept_name
-			} else {
-				deptInfo[i].parent_name = ""
-			}
+		//console.info("长度："+companyInfos.length)
+		//console.info("数据："+JSON.stringify(companyInfos))
+		var pepolenum = companyInfos.length
+		var pepoleMoney = 0;
+		for(var j=0;j<companyInfos.length;j++){
+			pepoleMoney = pepoleMoney + companyInfos[j].money
 		}
-
-		return tools.serverSuccess(tools.underLineTurnHump(deptInfo));
-	} catch (err) {
-		return err.message
-	}
-}
-
-/**
- * 查询部门
- */
-async function getDeptList(data) {
-	const $ = db.command.aggregate;
-	const _ = db.command
-	try {
-		let info = data.info.title;
-		let deptInfo = await db.collection('dept').where({
-			is_enable: "0",
-			is_delete: "0"
-		}).get();
-		deptInfo = deptInfo.data
-
-		return tools.serverSuccess(tools.underLineTurnHump(deptInfo));
+		//console.info("金额："+pepoleMoney)
+		
+		var list ={}
+		list.pepolenum = pepolenum;
+		list.pepoleMoney = pepoleMoney;
+		return tools.serverSuccess(list)
 	} catch (err) {
 		return err.message
 	}

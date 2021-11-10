@@ -16,10 +16,12 @@ exports.main = async (event, context) => {
 
 async function selectAmount() {
 	try {
-		
+		var list ={}
 		let num =await db.collection('bookingInformation').where({
-			creat_time: tools.formatDate(new Date())
+			creat_time: '20211018'//tools.formatDate(new Date())
 		}).get();
+		// list.isopen = true
+		// list.issubmit = false
 		return tools.serverSuccess(num.data)
 	} catch (err) {
 		return err.message

@@ -2,7 +2,17 @@
 
 // 配置教程参考：https://uniapp.dcloud.net.cn/uniCloud/quickstart?id=runparam
 
+
 {
-	
-	"method": "selectGoUpNoticeList"
+	"data": {
+		"worknumber": "36086546512115",
+		"name": "测试",
+		"idcard": "54565432121654",
+		"money": "50000.00",
+		"call": 1,
+		"manager": "张三",
+		"organization": "丰城",
+		"equipment": "16346580935935590330"
+	},
+	"method": "selectAllNoticeList"
 }

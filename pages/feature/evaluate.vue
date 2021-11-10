@@ -1,12 +1,12 @@
 <template>
 	<view>
 		<view class="view_contain">
-				<view class="view_iconText">
+				<view class="view_iconText" v-if="isopen">
 					<icon type="success" size="100" color="#39b54a" />
 					<text class="text_title">预约成功</text>
-					<view class="text_title"  style="width: 600rpx;height: 130rpx;color:#e98f36;position: relative;">
+					<view class="text_title" v-if="isvip" style="width: 600rpx;height: 130rpx;color:#e98f36;position: relative;">
 						<image src="../../static/images/tip.png" class="imgStyle"></image>
-						<view style="width: 450rpx;position: absolute;right: 0;">您的预约金额超过50万，请尽快开通绿色通道</view>
+						<view style="width: 450rpx;position: absolute;right: 0;">超过50万限额请联系客户经理通过绿色通道预约</view>
 					</view>
 					<text class="text_content">您的预约编码是{{serialnumber}}</text>
 				</view>
@@ -38,7 +38,6 @@
 					evaluate: 1,
 					card:""
 				},
-				isVip:false,
 				serialnumber:"",//预约编号
 				evaluates: [{
 						text: '满意',
@@ -52,12 +51,25 @@
 						value: 3
 					}
 				],
+				isopen:false,
+				isvip:false,
 			}
 		},
 		onLoad(query) {
 		    let t = this;
 			t.dataForm.card = query.card;
-			t.isVip = query.isVip;
+			t.isopen = query.isopen
+			if(query.isVip == '0'){
+				t.isvip = true
+			}else{
+				t.isvip = false
+			}
+			// console.info("111:"+query.isvip)
+			// this.isvip = query.isvip;
+			// setTimeout(function(){
+			// 	t.isvip = query.isVip;
+			// },1000)
+			
 			var numbers = query.numbers.toString();
 			switch(numbers.length){
 				case 1:this.serialnumber ="0000"+numbers;break;
@@ -67,6 +79,7 @@
 				case 5:this.serialnumber =numbers;break;
 				default:break;
 			}
+			
 			
 		},
 		methods: {

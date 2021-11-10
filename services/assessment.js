@@ -23,6 +23,11 @@ module.exports = {
 	addAssessment(data){
 		data.method = 'addAssessment'
 		return callit(data)
+	},
+	//查询累计的客户和金额
+	selectAllNoticeList(data){
+		data.method = 'selectAllNoticeList'
+		return callit(data)
 	}
 	
 }
