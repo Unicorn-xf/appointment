@@ -62,7 +62,7 @@
 						</view>
 					</view>
 				</view>
-				<!-- <view class="static">
+				<view class="static">
 					<view class="static-item" style="border-radius: 20upx 0 0 20upx;">
 						<view class="static-item-type" style="color: #fff;">累计客户</view>
 						<view class="static-item-number">{{clientnumleiji}}<span style="font-size: 24upx;">人</span>
@@ -72,7 +72,7 @@
 						<view class="static-item-type" style="color: #fff;">累计额度</view>
 						<view class="static-item-number">{{leijijine}}<span style="font-size: 24upx;">万元</span></view>
 					</view>
-				</view> -->
+				</view>
 			</view>
 			<view class="btnStyle">
 				<view v-if="isopen">

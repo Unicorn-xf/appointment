@@ -139,6 +139,15 @@
 						})
 						return false;
 					}
+					
+					if((parseFloat(self.dataForm.money)*10000) > 2000000) {
+						uni.showModal({
+							title: "提示",
+							content: "由于金额过大，请联系管理人员预约",
+							showCancel: false
+						})
+						return false;
+					}
 				}
 				if(self.dataForm.manager == null || self.dataForm.manager == '') {
 					uni.showModal({
