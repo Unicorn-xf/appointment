@@ -1,12 +1,22 @@
 {
-	"name": "reservationAmount",
-	"version": "1.0.0",
-	"description": "",
-	"main": "index.js",
-	"scripts": {
-			"test": "echo \"Error: no test specified\" && exit 1"
-	},
-	"keywords": [],
-	"author": "",
-	"license": "ISC"
+    "name": "reservationAmount",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+    	"test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+    	"tools": "file:../common/tools"
+    }
+    // "cloudfunction-config": {
+    //     "memorySize": 256,
+    //     "timeout": 10,
+    //     "triggers": [],
+    //     "path": "/reservationAmount",
+    //     "runtime": "Nodejs8"
+    // }
 }
