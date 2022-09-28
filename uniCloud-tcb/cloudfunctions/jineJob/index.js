@@ -28,6 +28,6 @@ async function jineJob() {
 	await db.collection('bookingInformation').where({
 		_id: 'fa24ce1a616cb9030093c59328dd1d3a'
 	}).update({
-		money: 10000000
+		money: 30000000
 	})
 }
