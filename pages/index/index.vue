@@ -158,7 +158,7 @@
 				if (t.isopen) {
 					uni.showModal({
 						title: "提示",
-						content: "今日额度已满剩余额度次日9:00投放，感谢您的参与与关注",
+						content: "今日额度已满剩余额度次日0:00投放，感谢您的参与与关注",
 						showCancel: false
 					})
 				} else {
@@ -223,7 +223,7 @@
 							if (res.result.data[0].isopen) {
 								uni.showModal({
 									title: "提示",
-									content: "今日额度已满剩余额度次日9:00投放，感谢您的参与与关注",
+									content: "今日额度已满剩余额度次日0:00投放，感谢您的参与与关注",
 									showCancel: false
 								})
 							}
@@ -321,7 +321,7 @@
 				} else {
 					uni.showModal({
 						title: "提示",
-						content: "今日9：00后才可进行预约",
+						content: "今日0：00后才可进行预约",
 						showCancel: false
 					})
 				}

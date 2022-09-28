@@ -248,7 +248,7 @@ module.exports = {
 		const minute = date.getMinutes()
 		const second = date.getSeconds()
 	
-		return [year, month, day].map(formatNumber).join('-') + ' ' + "09:00:00"
+		return [year, month, day].map(formatNumber).join('-') + ' ' + "00:00:00"
 	},
 
 	// 驼峰转下划线
