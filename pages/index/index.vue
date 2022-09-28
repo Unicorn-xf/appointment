@@ -1,18 +1,19 @@
 <template>
 	<view>
+		<!-- <image class="bg-sets" src="https://6661-faasspace-636c54-1302268565.tcb.qcloud.la/tuzi/backImg.jpg"></image> -->
 		<!-- <image class="bg-set" src="https://6661-faasspace-636c54-1302268565.tcb.qcloud.la/banner1.png"></image> -->
 
 		<!-- <redpacketrain :redpackets="reds" @clickRedPacket="clickRedPacket"></redpacketrain> -->
 
-		<view class="place">
-		</view>
+		<!-- <view class="place">
+		</view> -->
 
-		<view class="hideView">
+		<!-- <view class="hideView">
 			<image mode="aspectFill" v-if="isopen" class="bg-set"
 				src="https://6661-faasspace-636c54-1302268565.tcb.qcloud.la/bannerTop1.png"></image>
-		</view>
-		<view style="width: 100%;padding-top: 26rpx;">
-			<image class="bg-sets" src="https://6661-faasspace-636c54-1302268565.tcb.qcloud.la/bottomImg1.png"></image>
+		</view> -->
+		<view style="width: 100%;padding-bottom: 50rpx;">
+			<image class="bg-sets" src="https://6661-faasspace-636c54-1302268565.tcb.qcloud.la/tuzi/backImg.jpg"></image>
 			<view class="bannerStyle">
 				<image v-if="issubmit" style="width: 100%;"
 					src="https://6661-faasspace-636c54-1302268565.tcb.qcloud.la/111.png"></image>
@@ -347,7 +348,31 @@
 					});
 				}
 			},
-
+			// autoImage(e) {
+			//     var that = this;
+			//     var  originalWidth  = e.detail.width;
+			//     var originalHeight = e.detail.height;
+			//     var imageWidth = 0;
+			//     var imageHeight = 0;
+			//     wx.getSystemInfo({
+			//       complete: (res) => {
+			//         var winWidth = res.windowWidth;
+			//         if (originalWidth > winWidth) {
+			//           var autoWidth = winWidth;
+			//           var autoHeight = (autoWidth * originalHeight) / originalWidth;
+			//           imageWidth = autoWidth + 'px';
+			//          imageHeight = autoHeight + 'px';
+			//         } else {
+			//           imageWidth = originalWidth + 'px';
+			//           imageHeight = originalHeight + 'px';
+			//         }
+			//         that.setData({
+			//           imageWidth: imageWidth,
+			//           imageHeight: imageHeight
+			//         });
+			//       }
+			//     })
+			//   }
 		}
 	}
 </script>
@@ -399,7 +424,7 @@
 	}
 
 	.bg-sets {
-		position: absolute;
+		position: fixed;
 		width: 100%;
 		height: 100%;
 		top: 0;
@@ -408,9 +433,6 @@
 	}
 </style>
 <style lang="scss">
-	// page {
-	// 	background-image: '../../static/banner.png';
-	// }
 
 	/* 轮播 */
 	.notificationBanner {
@@ -515,7 +537,7 @@
 
 	.bannerStyle {
 		width: 100%;
-		margin-top: 28rpx;
+		margin-top: 350rpx;
 		// height: 300rpx;
 		//border: 1px solid #000;
 	}
