@@ -39,6 +39,15 @@ async function getReservationAmount(data) {
 		if(data.organization){
 			selectInfo.organization = data.organization
 		}
+		
+		if(data.manager){
+			selectInfo.manager = data.manager
+		}
+		
+		if(data.money){
+			selectInfo.money = Number(data.money)
+		}
+		
 		let list = await db.collection('reservationAmount').where(selectInfo).skip((pageInfo -1) * limitInfo ) // 跳过前20条
 		.limit(limitInfo).orderBy("create_time","desc").get();
 		
@@ -67,6 +76,12 @@ async function getExportReservationAmount(data) {
 		}
 		if(data.organization){
 			selectInfo.organization = data.organization
+		}
+		if(data.manager){
+			selectInfo.manager = data.manager
+		}
+		if(data.money){
+			selectInfo.money = Number(data.money)
 		}
 		let count = await db.collection('reservationAmount').where(selectInfo).count();
 		
