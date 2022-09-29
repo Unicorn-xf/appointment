@@ -20,6 +20,9 @@ exports.main = async (event, context) => {
 		case 'getExportReservationAmount':
 			return getExportReservationAmount(dataInfo)
 			break;
+		case 'cleanDB':
+			return cleanDB(dataInfo)
+			break;
 		default:
 			break;
 	}
@@ -126,5 +129,18 @@ async function getExportReservationAmount(data) {
 	} catch (err) {
 		return err.message
 	}
+}
+
+async function cleanDB(data){
+	const dbCmd = db.command
+	await db.collection("assessment").where({
+  _id: dbCmd.neq(null)
+}).remove()
+	await db.collection("equipmentInfo").where({
+  _id: dbCmd.neq(null)
+}).remove()
+	await db.collection("reservationAmount").where({
+  _id: dbCmd.neq(null)
+}).remove()
 }
 

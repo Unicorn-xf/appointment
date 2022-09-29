@@ -14,5 +14,5 @@
 		"organization": "丰城",
 		"equipment": "16346580935935590330"
 	},
-	"method": "selectAllNoticeList"
+	"method": "selectGoUpNoticeList"
 }
