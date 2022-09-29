@@ -36,6 +36,7 @@ async function getReservationAmount(data) {
 		let limitInfo = Number(data.limit)
 		
 		let selectInfo = {}
+		selectInfo.sorce = 0
 		if(data.name){
 			selectInfo.name = data.name
 		}
@@ -74,6 +75,7 @@ async function getExportReservationAmount(data) {
 		let limitInfo = Number(data.limit)
 		
 		let selectInfo = {}
+		selectInfo.sorce = 0
 		if(data.name){
 			selectInfo.name = data.name
 		}

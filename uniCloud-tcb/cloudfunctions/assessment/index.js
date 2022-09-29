@@ -66,6 +66,8 @@ async function addFormInfo(data) {
 		data._id = (parseInt(amount.total) + 1).toString()
 		data.money = parseInt(data.money)
 		data.create_time = tools.formatDateTime(new Date())
+		//0:来自手机，1：来自外部造的假数据
+		data.sorce = 0 
 		await db.collection('reservationAmount').add(data)
 
 		await db.collection('bookingInformation').where({
