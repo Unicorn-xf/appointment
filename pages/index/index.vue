@@ -7,19 +7,31 @@
 
 		<!-- <view class="place">
 		</view> -->
-
-		<!-- <view class="hideView">
+		<view v-if="issubmitInfo">
+			欢迎进入小程序页面
+		</view>
+		<view class="hideView">
 			<image mode="aspectFill" v-if="isopen" class="bg-set"
-				src="https://6661-faasspace-636c54-1302268565.tcb.qcloud.la/bannerTop1.png"></image>
-		</view> -->
+				src="https://6661-faasspace-636c54-1302268565.tcb.qcloud.la/tuzi/head01.jpg"></image>
+		</view>
 		<view style="width: 100%;padding-bottom: 50rpx;">
-			<image class="bg-sets" src="https://6661-faasspace-636c54-1302268565.tcb.qcloud.la/tuzi/backImg.jpg"></image>
+			<image class="bg-sets" src="https://6661-faasspace-636c54-1302268565.tcb.qcloud.la/bottomImg1.png"></image>
 			<view class="bannerStyle">
-				<image v-if="issubmit" style="width: 100%;"
-					src="https://6661-faasspace-636c54-1302268565.tcb.qcloud.la/111.png"></image>
+				
+				<uni-forms  v-if="issubmit" ref="dataForm" :rules="rules" :modelValue="dataForm" >
+					<uni-forms-item label="账号" name="name">
+						<uni-easyinput v-model="dataForm.name"  placeholder="请输入账号" placeholder-style="color: #CD7F32;"/>
+					</uni-forms-item>
+					<uni-forms-item label="密码" name="idcard">
+						<uni-easyinput v-model="dataForm.pwd"  maxlength="14" type="password" placeholder-style="color: #CD7F32;"/>
+					</uni-forms-item>
+				</uni-forms>
+				
+				<!-- <image v-if="issubmitInfo" style="width: 100%;"
+					src="https://6661-faasspace-636c54-1302268565.tcb.qcloud.la/111.png"></image> -->
 				<banner v-if="isopen" :list="bannerList" :themeColor="themeColor" @toDetailPage="toDetailPage"></banner>
 			</view>
-			<view class="gundongStyle" v-if="isopen">
+			<view class="gundongStyle" v-if="isopen || issubmitInfo">
 				<view class="scroll_box">
 					<swiper class="swiper" circular="true" vertical="true" display-multiple-items="3"
 						:autoplay="autoplay" :interval="interval" :duration="duration">
@@ -46,7 +58,7 @@
 			<!-- <view class="notificationBar">
 				<goUpNotice :list="goUpNoticeList" :themeColor="themeColor" :haveMore="false"></goUpNotice>
 			</view> -->
-			<view class="yuyueStyle" v-if="isopen">
+			<view class="yuyueStyle" v-if="isopen || issubmitInfo">
 				<view class="content" style="color: #fff;">
 					<view style="text-align: center;font-weight: 600;font-size: 40rpx;">今日预约额度仅剩</view>
 					<view style="text-align: center;font-weight: 600;font-size: 40rpx;">{{remainingMoney}}万元</view>
@@ -80,7 +92,8 @@
 					<button v-if="isgray" @click="tipDaoqi(1)" class="bnts">我要预约</button>
 					<button v-else @click="toAppointmentPage()" class="bnt">我要预约</button>
 				</view>
-				<button v-if="issubmit" @click="tipDaoqi(2)" class="bnts">查询信息</button>
+				<button v-if="issubmit" @click="login()" class="bnts">登录</button>
+				<!-- <button v-if="issubmitInfo" @click="tipDaoqi(2)" class="bnts">查询信息</button> -->
 			</view>
 
 		</view>
@@ -126,6 +139,11 @@
 				reds: [],
 				isgray: false,
 				issubmit: false,
+				dataForm: {
+					pwd:'',
+					name: ''
+				},
+				issubmitInfo:false
 			}
 		},
 		onLoad() {
@@ -154,6 +172,24 @@
 			this.reds = tempArr;
 		},
 		methods: {
+			login(){
+				if(this.dataForm.name == "admin" && this.dataForm.pwd == "123"){
+					this.issubmitInfo = true
+					this.issubmit = false
+					uni.showModal({
+						title: "提示",
+						content: "登录成功",
+						showCancel: false
+					})
+				}else{
+					uni.showModal({
+						title: "提示",
+						content: "请输入正确的账号密码",
+						showCancel: false
+					})
+				}
+				
+			},
 			tipDaoqi(type) {
 				let t = this
 				if (t.isopen) {
@@ -172,7 +208,7 @@
 					} else {
 						uni.showModal({
 							title: "提示",
-							content: "今日已过查询时间",
+							content: "登录成功",
 							showCancel: false
 						})
 					}
@@ -214,7 +250,7 @@
 							if (self.bannerList.length == 0) {
 								self.bannerList.push({
 									id: 2,
-									img: 'https://6661-faasspace-636c54-1302268565.tcb.qcloud.la/微信图片_20211014111300.jpg',
+									img: 'https://6661-faasspace-636c54-1302268565.tcb.qcloud.la/tuzi/lunbo.png',
 									url: 'www.baidu.com/',
 								})
 							}
@@ -245,6 +281,7 @@
 				assessment.selectGoUpNoticeList({
 					data: {}
 				}).then(res => {
+					console.log("====:"+JSON.stringify(res))
 					if (res.result.retcode == "0000") {
 						var data = res.result.data;
 						var info = [];
@@ -267,6 +304,7 @@
 								"directOne2": "成功预约" + money + "万元"
 							});
 						})
+						console.log("====111:"+JSON.stringify(info))
 						self.goUpNoticeList = info;
 					}
 				}).catch(err => {
@@ -537,7 +575,9 @@
 
 	.bannerStyle {
 		width: 100%;
-		margin-top: 350rpx;
+		margin-top: 28rpx;
+		padding-left: 2rpx;
+		padding-right: 20rpx;
 		// height: 300rpx;
 		//border: 1px solid #000;
 	}
@@ -559,6 +599,7 @@
 	.btnStyle {
 		width: 100%;
 		margin-top: 50rpx;
+		margin-bottom: 50rpx;
 		// position: fixed;
 		// bottom: 100rpx;
 		// left: 275rpx;
