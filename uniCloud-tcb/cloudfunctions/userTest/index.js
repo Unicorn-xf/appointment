@@ -1,8 +1,6 @@
-'use strict';
 const db = uniCloud.database();
 const tools = require('tools');
 exports.main = async (event, context) => {
-	//event为客户端上传的参数
 	let method = ""
 	let dataInfo = {}
 	if(event.body){
@@ -59,10 +57,10 @@ async function getReservationAmount(data) {
 			selectInfo.money = Number(data.money)
 		}
 		
-		let list = await db.collection('reservationAmount').where(selectInfo).skip((pageInfo -1) * limitInfo ) // 跳过前20条
+		let list = await db.collection('userTest').where(selectInfo).skip((pageInfo -1) * limitInfo ) // 跳过前20条
 		.limit(limitInfo).orderBy("create_time","desc").get();
 		
-		let count = await db.collection('reservationAmount').where(selectInfo).count();
+		let count = await db.collection('userTest').where(selectInfo).count();
 		
 		let dataInfo = {
 			totalCount:count.total,
@@ -95,7 +93,7 @@ async function getExportReservationAmount(data) {
 		if(data.money){
 			selectInfo.money = Number(data.money)
 		}
-		let count = await db.collection('reservationAmount').where(selectInfo).count();
+		let count = await db.collection('userTest').where(selectInfo).count();
 		
 		let number = count.total;
 		
@@ -108,7 +106,7 @@ async function getExportReservationAmount(data) {
 				if(numInfo > number){
 					break;
 				}
-				let list = await db.collection('reservationAmount').where(selectInfo).skip(numInfo) // 跳过前20条
+				let list = await db.collection('userTest').where(selectInfo).skip(numInfo) // 跳过前20条
 				.limit(1000).orderBy("create_time","desc").get();
 				
 				numInfo = numInfo+1000
@@ -116,7 +114,7 @@ async function getExportReservationAmount(data) {
 			}
 			// console.log("1111")
 		}else{
-			let list = await db.collection('reservationAmount').where(selectInfo).skip((pageInfo -1) * limitInfo ) // 跳过前20条
+			let list = await db.collection('userTest').where(selectInfo).skip((pageInfo -1) * limitInfo ) // 跳过前20条
 			.limit(limitInfo).orderBy("create_time","desc").get();
 			
 			dataList = list.data
@@ -140,24 +138,11 @@ async function getExportReservationAmount(data) {
 	}
 }
 
-async function cleanDB(data){
-	const dbCmd = db.command
-	await db.collection("assessment").where({
-  _id: dbCmd.neq(null)
-}).remove()
-	await db.collection("equipmentInfo").where({
-  _id: dbCmd.neq(null)
-}).remove()
-	await db.collection("reservationAmount").where({
-  _id: dbCmd.neq(null)
-}).remove()
-}
-
 async function getInfoById(data){
 	try {
 		let dataInfo = []
 		if(data._id){
-			let list = await db.collection('reservationAmount').where({
+			let list = await db.collection('userTest').where({
 				_id:data._id
 			}).get()
 			
@@ -175,7 +160,7 @@ async function updateInfoById(data){
 		if(data.data.id){
 			let id = data.data.id
 			delete(data.data["id"]);
-			await db.collection('reservationAmount').where({
+			await db.collection('userTest').where({
 				_id:id
 			}).update(data.data)
 			return tools.serverSuccess("更新成功");
@@ -184,4 +169,5 @@ async function updateInfoById(data){
 		return tools.serverFailure()
 	}
 }
+
 

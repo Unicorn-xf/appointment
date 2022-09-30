@@ -11,12 +11,5 @@
     "license": "ISC",
     "dependencies": {
     	"tools": "file:../common/tools"
-    },
-    "cloudfunction-config": {
-        "memorySize": 256,
-        "timeout": 10,
-        "triggers": [],
-        "path": "/reservationAmount",
-        "runtime": "Nodejs8"
     }
 }
