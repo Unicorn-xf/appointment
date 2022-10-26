@@ -18,7 +18,7 @@ async function selectAmount() {
 	try {
 		var list ={}
 		let num =await db.collection('bookingInformation').where({
-			creat_time: '20211018'//tools.formatDate(new Date())
+			_id: 'fa24ce1a616cb9030093c59328dd1d3a'//tools.formatDate(new Date())
 		}).get();
 		// list.isopen = true
 		// list.issubmit = false

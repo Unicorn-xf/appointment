@@ -175,6 +175,11 @@ async function updateInfoById(data){
 		if(data.data.id){
 			let id = data.data.id
 			delete(data.data["id"]);
+			let name = data.data.updateName
+			delete(data.data["updateName"])
+			data.data.money = parseInt(data.data.money)
+			data.data.update_time = tools.formatDateTime(new Date())
+			data.data.update_name = name
 			await db.collection('reservationAmount').where({
 				_id:id
 			}).update(data.data)

@@ -28,6 +28,7 @@ exports.main = async (event, context) => {
 
 async function addFormInfo(data) {
 	const dbCmd = db.command;
+	const transaction = await db.startTransaction()
 	try {
 		// var beginDate = tools.formatDateLine(new Date()) +" 00:00:00";
 		// var endDate = tools.formatDateLine(new Date()) +" 23:59:59"
@@ -48,34 +49,38 @@ async function addFormInfo(data) {
 			return tools.serverFailure("-2");
 		}
 		//查询当时金额
-		let num = await db.collection('bookingInformation').where({
-			creat_time: '20211018'
-		}).get();
-
+		let num = await transaction.collection('bookingInformation').doc('fa24ce1a616cb9030093c59328dd1d3a').get();
+			
 		num = num.data;
-		var money = num[0].money
-		var moneyForm = data.money
-		var shengyumoney = (money - moneyForm)
-
+		var money = num.money
+		var moneyForm = parseInt(data.money)
+		var shengyumoney = parseInt(money - moneyForm)
+			
 		if (money < moneyForm) {
+			await transaction.commit()
 			return tools.serverFailure("-1");
+		}else{
+			await transaction.collection('bookingInformation').doc('fa24ce1a616cb9030093c59328dd1d3a').update({
+				money: shengyumoney
+			});
+			await transaction.commit()
 		}
 		//查询总条数
-		let amount = await db.collection('reservationAmount').count();
+		//let amount = await db.collection('reservationAmount').count();
 		
-		data._id = (parseInt(amount.total) + 1).toString()
+		//data._id = (parseInt(amount.total) + 100).toString()
+		data._id = tools.randomUUID()
+		//console.info("_id====:"+data._id)
 		data.money = parseInt(data.money)
+		data.initmoney = parseInt(data.money)
 		data.create_time = tools.formatDateTime(new Date())
+		data.create_name = data.name
+		data.update_time = tools.formatDateTime(new Date())
+		data.update_name = data.name
 		//0:来自手机，1：来自外部造的假数据
 		data.sorce = 0 
 		await db.collection('reservationAmount').add(data)
-
-		await db.collection('bookingInformation').where({
-			creat_time: '20211018'
-		}).update({
-			money: shengyumoney
-		});
-
+		
 
 		let list = {}
 		list.equipment = data.equipment
@@ -83,8 +88,28 @@ async function addFormInfo(data) {
 		list.create_time = tools.formatDateTime(new Date())
 		await db.collection('equipmentInfo').add(list)
 
-
-		return tools.serverSuccess((parseInt(amount.total) + 1));
+		//添加客户的金额
+		let userAddList = {}
+		userAddList.name = data.name
+		userAddList.idcard = data.idcard
+		userAddList.shengyumoney = shengyumoney
+		userAddList.money = parseInt(data.money)
+		userAddList.create_time = tools.formatDateTime(new Date())
+		var beginDate = tools.formatDateLine(new Date()) + " 00:00:00";
+		var endDate = tools.formatDateLine(new Date()) + " 23:59:59"
+		
+		let listInfo = await db.collection('reservationAmount').where({
+			create_time: dbCmd.gte(beginDate).and(dbCmd.lte(endDate))
+		}).limit(1000).get();
+		var pepoleMoney = 0;
+		listInfo = listInfo.data
+		for(var j=0;j<listInfo.length;j++){
+			pepoleMoney = pepoleMoney + listInfo[j].money
+		}
+		userAddList.leijimoney = pepoleMoney
+		await db.collection('userAddInfo').add(userAddList)
+		
+		return tools.serverSuccess();
 	} catch (err) {
 		console.info("错误："+err.message)
 		return err.message
